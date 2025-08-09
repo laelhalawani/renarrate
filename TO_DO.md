@@ -1,2 +1,4 @@
+- use gemini pro for CC if video is longer than 7-8 minutes 
+- add info not to include "closed caption based sound descriptions" in prompt i.e. not incldue "[music playing]" , "[birds chirping]", "[silence]" or handle that in post processing 
+- consider using whisper for ASR altogether
 - can separate background to preserve it wiht https://elevenlabs.io/docs/api-reference/audio-isolation/convert
-- alternatively lower the volume of the original by a lot and add the new track as a voiceover
