@@ -6,11 +6,15 @@ load_dotenv()
 client = genai.Client()
 
 CREATE_CC_SRT = (
-    "Transcribe for the following audio using the SRT format, break the text down into logical sentences up to two lines per . Count cues from 1 and use timestamps in format HH:MM:SS,mmm or MM:SS,mmm consistently across the SRT file. Output only the SRT file. \n"
+    "Transcribe for the entire following audio using the SRT format, break the text down into sentences or coherent parts."
+    "Count cues from `1` and use timestamps in format `HH:MM:SS,mmm --> HH:MM:SS,mmm` consistently across the entire SRT file."
+    "I.e.: "
+    "```srt\n1\n00:00:01,105 --> 00:00:03,183\nThis is the first line of the SRT file.\n\n2\n00:00:03,503 --> 00:00:05,200\nThis is the second line of the SRT file.\n```\n"
+    "Output only the SRT file.\n"
 )
 
 FIX_SRT_TIMESTAMP = (
-    "In the following SRT file, please fix the timestamps to adhere exactly to the HH:MM:SS,mmm or MM:SS,mmm format. Preserve all the text, cues numbers and timestamps' timing as is, adjust only the formatting where needed. Output only the updated SRT file. SRT to fix timestamps formatting:\n```srt\n{srt_text}\n````\n"
+    "In the following SRT file, please fix the timestamps to adhere exactly to the `HH:MM:SS,mmm --> HH:MM:SS,mmm` format. Preserve all the text, cues numbers and timestamps' timing as is, adjust only the formatting where needed. Output the entire updated SRT file drop-in replacement. SRT to fix timestamps formatting:\n```srt\n{srt_text}\n````\n"
 )
 FIXING_RETRIES = 5
 

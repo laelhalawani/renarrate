@@ -11,10 +11,10 @@ from flow.models.voices import Voice
 from flow.utils.convert import convert_video
 from flow.utils.languages import select_language_by_name
 from settings import STORAGE_DIR
-import os
 
 
-def run_pipeline(video_url: str, target_language: str, voice:Voice) -> VideoProcessingPaths:
+
+def run_pipeline(video_url: str, target_language: str, voice:Voice, original_audio_loudness:float=0.13) -> VideoProcessingPaths:
     """
     Runs the full video processing pipeline: download, separate audio, generate CC, translate CC, generate narration, and merge.
     Args:
@@ -58,17 +58,8 @@ def run_pipeline(video_url: str, target_language: str, voice:Voice) -> VideoProc
         original_video_path=processing_paths.downloaded_video_path,
         generated_narration_path=processing_paths.generated_narration_path,
         final_video_save_path=processing_paths.final_video_path,
-        original_audio_volume_percentage=0.2 # 20% of original audio volume
+        original_audio_volume_percentage=original_audio_loudness
     )
 
     return processing_paths
 
-if __name__ == "__main__":
-    # Example usage
-    video_url = "https://www.youtube.com/watch?v=tqPQB5sleHY"
-    target_language = select_language_by_name("Polish")
-    gemini_voice = select_gemini_voice("Orus")
-    elevenlabs_voice = select_elevenlabs_voice("Daniel")
-    paths = run_pipeline(video_url, target_language, elevenlabs_voice)
-    convert_video(paths.downloaded_video_path, "mp4")
-    convert_video(paths.final_video_path, "mp4") 
