@@ -1,7 +1,9 @@
 import os
 import math
+from dotenv import load_dotenv
+from google import genai
 import wave
-from typing import List
+from typing import List, Optional
 import ffmpeg  # pip install ffmpeg-python
 from moviepy import AudioFileClip, CompositeAudioClip
 import time
@@ -50,6 +52,7 @@ def _decompose_atempo_factor(f: float) -> List[float]:
         factors.append(f)
     return factors
 
+
 def _time_stretch_wav_to_duration(
     in_path: str, out_path: str, target_secs: float, sample_rate: int = 24000
 ) -> None:
@@ -63,10 +66,7 @@ def _time_stretch_wav_to_duration(
     streams = [s for s in probe.get("streams", []) if s.get("codec_type") == "audio"]
     if not streams:
         raise ValueError(f"No audio stream found in {in_path}")
-    # Duration can be missing on some PCM WAVs; fall back to format duration if needed.
-    src_dur_str = streams[0].get("duration")
-    if src_dur_str is None:
-        src_dur_str = probe.get("format", {}).get("duration")
+    src_dur_str = streams[0].get("duration") or probe.get("format", {}).get("duration")
     if src_dur_str is None:
         raise ValueError("Unable to determine source duration for tempo adjustment.")
     src_dur = float(src_dur_str)
@@ -76,11 +76,11 @@ def _time_stretch_wav_to_duration(
     chain = _decompose_atempo_factor(atempo)
 
     stream = ffmpeg.input(in_path)
-    # ✅ Correct usage: chain filters on the stream (module-level ffmpeg.audio does not exist)
     for f in chain:
-        stream = stream.filter("atempo", f)  # e.g., .filter('atempo', 2.0)
+        stream = stream.filter("atempo", f)
     out = ffmpeg.output(stream, out_path, acodec="pcm_s16le", ac=1, ar=sample_rate).overwrite_output()
     out.run(quiet=True)
+
 
 def generate_narration(
     translated_cc_path: str,
@@ -94,7 +94,7 @@ def generate_narration(
     Generate narration aligned to SRT timings by synthesizing one clip per cue.
     1) Prompt TTS with a per-cue pace hint ("~X seconds").
     2) If still off, time-stretch (pitch-preserving) to the cue window using FFmpeg 'atempo'.
-    3) Place each clip at cue start; trim overrun with 'subclipped' to avoid overlap.
+    3) Place each clip at cue start; do not trim overrun (compress-only policy).
     """
     with open(translated_cc_path, "r", encoding="utf-8") as f:
         translated_srt = f.read()
@@ -115,7 +115,6 @@ def generate_narration(
 
         attempts = 0
         while attempts < RETRIES:
-
             try:
                 if isinstance(voice, GeminiVoice):
                     tts_bytes = gemini_tts_bytes_for_text(text_for_tts, voice, target_secs)
@@ -138,23 +137,24 @@ def generate_narration(
         frag_path = os.path.join(tmp_dir, f"cue_{cue.index:05d}.wav")
         wave_file(frag_path, pcm_bytes, channels=1, rate=audio_fps, sample_width=2)
 
-        # Tempo-fit to window if outside tolerances
+        # Compress only when overlong
         if window > 0:
             try:
                 with AudioFileClip(frag_path) as m:
                     dur = float(m.duration)
-                deviation = abs(dur - window)
-                if (deviation > min_abs_deviation) and (deviation / max(window, 1e-6) > max_pct_deviation):
+                signed_diff = dur - window  # >0 means overlong
+                if (dur > window) and (abs(signed_diff) > min_abs_deviation) and (abs(signed_diff) / max(window, 1e-6) > max_pct_deviation):
                     adjusted = os.path.join(tmp_dir, f"cue_{cue.index:05d}_fit.wav")
-                    print(f"  - Adjusting tempo with ffmpeg atempo: current {dur:.3f}s -> target {window:.3f}s")
+                    print(f"  - Compressing with ffmpeg atempo: {dur:.3f}s -> {window:.3f}s")
                     _time_stretch_wav_to_duration(frag_path, adjusted, window, sample_rate=audio_fps)
                     os.replace(adjusted, frag_path)
+                # If dur <= window, do nothing (no slow-down)
             except Exception as e:
                 print(f"  ! Tempo adjustment failed for cue {cue.index}: {e}")
 
         fragment_paths.append(frag_path)
 
-    # Composite: place each fragment at its start time, trim any overrun
+    # Composite: place each fragment at its start time, no trimming
     print("Compositing per-cue audio onto timeline...")
     audio_clips = []
     idx_to_path = {}
@@ -171,9 +171,6 @@ def generate_narration(
         if not p:
             continue
         clip = AudioFileClip(p)
-        window = max(0.0, cue.end - cue.start)
-        if window > 0 and clip.duration > window:
-            clip = clip.subclipped(0, window)
         clip = clip.with_start(cue.start)
         audio_clips.append(clip)
 

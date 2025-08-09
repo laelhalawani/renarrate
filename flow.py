@@ -55,9 +55,10 @@ def run_pipeline(video_url: str, target_language: str, voice:Voice) -> VideoProc
 
     # Step 6: Merge
     merge_video_audio(
-        video_no_audio_path=processing_paths.video_no_audio_path,
+        original_video_path=processing_paths.downloaded_video_path,
         generated_narration_path=processing_paths.generated_narration_path,
-        final_video_save_path=processing_paths.final_video_path
+        final_video_save_path=processing_paths.final_video_path,
+        original_audio_volume_percentage=0.2 # 20% of original audio volume
     )
 
     return processing_paths

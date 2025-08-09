@@ -1,1 +1,2 @@
 - can separate background to preserve it wiht https://elevenlabs.io/docs/api-reference/audio-isolation/convert
+- alternatively lower the volume of the original by a lot and add the new track as a voiceover
