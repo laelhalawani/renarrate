@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VSCode
+.vscode/
+
+# Environment
+.env
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data/Output
+*.mkv
+*.mp4
+*.wav
+*.srt
+*.json
+*.txt
+*.log
+output/
+
+# Misc
+*.bak
+*.swp
+*.tmp
+
+# Pip
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+
+# Other
+*.sqlite3
+*.db
+*.lock
+
+# Project storage
+storage/
+storage/*
+storage/**
