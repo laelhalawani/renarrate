@@ -6,7 +6,8 @@ load_dotenv()
 client = genai.Client()
 
 TRANSLATE_SRT_INSTRUCTION = (
-    "Translate the following SRT subtitles to the {target_lang} language while preserving the exact numbers, timestamps and linebreaks.\n"
+    "Translate the following SRT subtitles to the {target_lang} language while preserving the exact numbers, timestamps and linebreaks."
+    "When translating, try to adjust the text to fit the timing (length) of the original subtitles as closely as possible, while keeping the meaning intact."
     "Subtitles to translate:\n```srt\n{subtitles}\n```"
 )
 
@@ -28,7 +29,7 @@ def translate_transcription(
         original_transcription = f.read()
     print(f"Translating CC from {original_cc_path} to {target_language}...")
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-2.5-pro",
         contents=[TRANSLATE_SRT_INSTRUCTION.format(target_lang=target_language, subtitles=original_transcription)],
     )
     translated_text = clean_srt_text(response.text) if response.text else ""

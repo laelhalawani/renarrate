@@ -68,6 +68,6 @@ if __name__ == "__main__":
     target_language = select_language_by_name("Polish")
     gemini_voice = select_gemini_voice("Orus")
     elevenlabs_voice = select_elevenlabs_voice("Daniel")
-    paths = run_pipeline(video_url, target_language, gemini_voice)
+    paths = run_pipeline(video_url, target_language, elevenlabs_voice)
     convert_video(paths.downloaded_video_path, "mp4")
     convert_video(paths.final_video_path, "mp4") 

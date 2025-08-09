@@ -1,10 +1,7 @@
 import os
 import math
-from dotenv import load_dotenv
-from google import genai
-from google.genai import types
 import wave
-from typing import List, Optional
+from typing import List
 import ffmpeg  # pip install ffmpeg-python
 from moviepy import AudioFileClip, CompositeAudioClip
 import time
@@ -12,9 +9,6 @@ from flow.utils.srt_utils import parse_srt
 from flow.tts.gemini_tts import tts_bytes_for_text as gemini_tts_bytes_for_text
 from flow.tts.elevenlabs_tts import tts_bytes_for_text as elevenlabs_tts_bytes_for_text
 from flow.models.voices import GeminiVoice, Voice, ElevenLabsVoice
-
-load_dotenv()
-client = genai.Client()
 
 RETRIES = 10
 RETRY_DELAY_S = 30
