@@ -129,8 +129,9 @@ def generate_narration(
                 elif isinstance(voice, ElevenLabsVoice):
                     tts_bytes = elevenlabs_tts_bytes_for_text(text_for_tts, voice, target_secs)
                     voice_name = voice.name
-                print(f"TTS cue {cue.index} [{cue.start:.3f}–{cue.end:.3f}s], target≈{(target_secs or 0):.2f}s, voice={voice_name}")
+                print(f"TTS cue generated {cue.index} [{cue.start:.3f}–{cue.end:.3f}s], target≈{(target_secs or 0):.2f}s, voice={voice_name}")
                 pcm_bytes = tts_bytes
+                break
             except Exception as e:
                 attempts += 1
                 print(f"  ! TTS failed for cue {cue.index} (attempt {attempts}/{RETRIES}): {e}")

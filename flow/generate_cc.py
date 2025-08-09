@@ -18,7 +18,7 @@ def generate_cc(audio_path: str, srt_save_path: str) -> None:
     Returns:
         None
     """
-    print(f"Uploading audio file: {audio_path}")
+    print(f"Uploading audio file for Gemini transcription: {audio_path}")
     uploaded_audio = client.files.upload(file=audio_path)
     print("Requesting CC generation from Gemini model...")
     response = client.models.generate_content(
