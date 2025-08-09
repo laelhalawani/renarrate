@@ -50,7 +50,8 @@ class VideoProcessingPaths:
 
     @property
     def translated_cc_path(self):
-        return self._path("translated_text.txt")
+        # Now an SRT, not a TXT, so we can preserve cue timings end-to-end.
+        return self._path("translated_text.srt")
 
     @property
     def generated_narration_path(self):

@@ -5,14 +5,16 @@ from flow.translate_cc import translate_transcription
 from flow.renarrate import generate_narration
 from flow.merge import merge_video_audio
 from flow.models.video_paths import VideoProcessingPaths
-from flow.utils.voices import select_voice_by_characteristic, select_voice_by_id, select_voice_by_name
+from flow.tts.gemini_voices import select_voice_by_name as select_gemini_voice
+from flow.tts.elevenlabs_voices import select_voice_by_name as select_elevenlabs_voice
+from flow.models.voices import Voice
 from flow.utils.convert import convert_video
 from flow.utils.languages import select_language_by_name
 from settings import STORAGE_DIR
 import os
 
 
-def run_pipeline(video_url: str, target_language: str) -> VideoProcessingPaths:
+def run_pipeline(video_url: str, target_language: str, voice:Voice) -> VideoProcessingPaths:
     """
     Runs the full video processing pipeline: download, separate audio, generate CC, translate CC, generate narration, and merge.
     Args:
@@ -45,11 +47,10 @@ def run_pipeline(video_url: str, target_language: str) -> VideoProcessingPaths:
 
     # Step 5: Renarrate
     # select voice
-    voice_name = select_voice_by_name("alnilam")
     generate_narration(
         translated_cc_path=processing_paths.translated_cc_path,
         generated_narration_save_path=processing_paths.generated_narration_path,
-        voice_name=voice_name
+        voice=voice
     )
 
     # Step 6: Merge
@@ -63,8 +64,10 @@ def run_pipeline(video_url: str, target_language: str) -> VideoProcessingPaths:
 
 if __name__ == "__main__":
     # Example usage
-    video_url = "https://www.youtube.com/watch?v=tqPQB5sleHY"
+    video_url = "https://www.youtube.com/watch?v=x3r6MF6XbkE"
     target_language = select_language_by_name("Polish")
-    paths = run_pipeline(video_url, target_language)
+    gemini_voice = select_gemini_voice("Orus")
+    elevenlabs_voice = select_elevenlabs_voice("Daniel")
+    paths = run_pipeline(video_url, target_language, gemini_voice)
     convert_video(paths.downloaded_video_path, "mp4")
     convert_video(paths.final_video_path, "mp4") 

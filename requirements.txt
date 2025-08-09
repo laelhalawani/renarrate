@@ -1,0 +1,6 @@
+google-genai==1.29.0
+moviepy==2.2.1
+yt-dlp==2025.7.21
+python-dotenv
+ffmpeg-python
+elevenlabs

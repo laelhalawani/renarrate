@@ -1,5 +1,6 @@
 from typing import List, Dict, Optional
 from difflib import get_close_matches
+from flow.models.voices import GeminiVoice
 
 # preview voices here https://aistudio.google.com/generate-speech
 VOICE_LIST: List[Dict[str, str]] = [
@@ -35,7 +36,18 @@ VOICE_LIST: List[Dict[str, str]] = [
     {"name": "Sulafat", "description": "Warm, Middle pitch, Female"},
 ]
 
-def select_voice_by_id(id: int) -> str:
+def voice_dict_to_voice(voice_dict: Dict[str, str]) -> GeminiVoice:
+    """
+    Converts a dictionary representation of a voice to a GeminiVoice instance.
+    Args:
+        voice_dict (Dict[str, str]): Dictionary containing voice information.
+    Returns:
+        GeminiVoice: Instance of GeminiVoice with the provided information.
+    """
+    return GeminiVoice(name=voice_dict["name"], id=voice_dict["name"], description=voice_dict["description"])
+
+
+def select_voice_by_id(id: int) -> GeminiVoice:
     """
     Selects a voice name by its index in VOICE_LIST and logs the selection.
     If the index is out of range, returns the first voice in the list.
@@ -47,11 +59,14 @@ def select_voice_by_id(id: int) -> str:
     if 0 <= id < len(VOICE_LIST):
         voice = VOICE_LIST[id]
         print(f"Selected voice by id {id}: {voice['name']} ({voice['description']})")
-        return voice["name"]
-    print(f"Voice id {id} is out of range. Returning first available voice: {VOICE_LIST[0]['name']} ({VOICE_LIST[0]['description']})")
-    return VOICE_LIST[0]["name"]
+        
+    else:
+        # If the index is out of range, return the first voice in the list
+        print(f"Voice id {id} is out of range. Returning first available voice: {VOICE_LIST[0]['name']} ({VOICE_LIST[0]['description']})")
+        voice = VOICE_LIST[0]
+    return voice_dict_to_voice(voice)
 
-def select_voice_by_characteristic(description: str) -> str:
+def select_voice_by_characteristic(description: str) -> GeminiVoice:
     """
     Selects the voice name with the most similar description (including gender, pitch, etc.) using fuzzy matching and logs the selection.
     If no match is found, returns the first voice in the list.
@@ -66,18 +81,22 @@ def select_voice_by_characteristic(description: str) -> str:
         for v in VOICE_LIST:
             if v["description"].lower() == matches[0].lower():
                 print(f"Selected voice by characteristic '{description}': {v['name']} ({v['description']})")
-                return v["name"]
-    print(f"No close match found for characteristic '{description}' with cutoff. Retrying without cutoff...")
-    matches = get_close_matches(description, descriptions, n=1, cutoff=0.0)
-    if matches:
-        for v in VOICE_LIST:
-            if v["description"].lower() == matches[0].lower():
-                print(f"Selected voice by characteristic (no cutoff) '{description}': {v['name']} ({v['description']})")
-                return v["name"]
-    print(f"No voice found matching characteristic '{description}' even without cutoff. Returning first available voice: {VOICE_LIST[0]['name']} ({VOICE_LIST[0]['description']})")
-    return VOICE_LIST[0]["name"]
+                voice = v
+    else:
+        print(f"No close match found for characteristic '{description}' with cutoff. Retrying without cutoff...")
+        matches = get_close_matches(description, descriptions, n=1, cutoff=0.0)
+        if matches:
+            for v in VOICE_LIST:
+                if v["description"].lower() == matches[0].lower():
+                    print(f"Selected voice by characteristic (no cutoff) '{description}': {v['name']} ({v['description']})")
+                    voice = v
+        else:
+            print(f"No voice found matching characteristic '{description}' even without cutoff. Returning first available voice: {VOICE_LIST[0]['name']} ({VOICE_LIST[0]['description']})")
+            voice = VOICE_LIST[0]
+    return voice_dict_to_voice(voice)
 
-def select_voice_by_name(name: str) -> str:
+
+def select_voice_by_name(name: str) -> GeminiVoice:
     """
     Selects the voice name with the most similar name using fuzzy matching and logs the selection.
     If no match is found, returns the first voice in the list.
@@ -92,13 +111,16 @@ def select_voice_by_name(name: str) -> str:
         for v in VOICE_LIST:
             if v["name"].lower() == matches[0].lower():
                 print(f"Selected voice by name '{name}': {v['name']} ({v['description']})")
-                return v["name"]
-    print(f"No close match found for name '{name}' with cutoff. Retrying without cutoff...")
-    matches = get_close_matches(name, names, n=1, cutoff=0.0)
-    if matches:
-        for v in VOICE_LIST:
-            if v["name"].lower() == matches[0].lower():
-                print(f"Selected voice by name (no cutoff) '{name}': {v['name']} ({v['description']})")
-                return v["name"]
-    print(f"No voice found matching name '{name}' even without cutoff. Returning first available voice: {VOICE_LIST[0]['name']} ({VOICE_LIST[0]['description']})")
-    return VOICE_LIST[0]["name"]
+                voice = v
+    else:
+        print(f"No close match found for name '{name}' with cutoff. Retrying without cutoff...")
+        matches = get_close_matches(name, names, n=1, cutoff=0.0)
+        if matches:
+            for v in VOICE_LIST:
+                if v["name"].lower() == matches[0].lower():
+                    print(f"Selected voice by name (no cutoff) '{name}': {v['name']} ({v['description']})")
+                    voice = v
+        else:
+            print(f"No voice found matching name '{name}' even without cutoff. Returning first available voice: {VOICE_LIST[0]['name']} ({VOICE_LIST[0]['description']})")
+            voice = VOICE_LIST[0]
+    return voice_dict_to_voice(voice)

@@ -24,8 +24,6 @@ Thumbs.db
 *.mp4
 *.wav
 *.srt
-*.json
-*.txt
 *.log
 output/
 
