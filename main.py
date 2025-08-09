@@ -6,7 +6,7 @@ from pipeline import run_pipeline
 
 if __name__ == "__main__":
     # Example usage
-    video_url = "https://www.youtube.com/watch?v=imiAXNnzkAc"
+    video_url = "https://www.youtube.com/watch?v=tqPQB5sleHY"
     target_language = select_language_by_name("Polish")
     # gemini-tts is in preview mode, it has really limited rates on Tier 1 only 10 RPM, 
     # the system will be fine (will retry with 30sec delay for each fragment generation up to 5 times, but will be really slow)

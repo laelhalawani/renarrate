@@ -3,4 +3,5 @@ moviepy==2.2.1
 yt-dlp==2025.7.21
 python-dotenv
 ffmpeg-python
-elevenlabs
+elevenlabs==2.9.2
+fastapi==0.116.1
