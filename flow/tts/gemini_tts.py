@@ -15,10 +15,10 @@ def tts_bytes_for_text(text: str, voice:GeminiVoice, target_secs: Optional[float
     """
     if target_secs and target_secs > 0:
         guidance = (
-            f"Read this text clearly and naturally, aiming for about {target_secs:.2f} seconds of audio. "
+            f"Read this text fairly fast, but clearly and naturally, aiming for about {target_secs:.2f} seconds of audio. "
         )
     else:
-        guidance = "Read this text clearly and naturally."
+        guidance = "Read this text fairly fast, but clearly and naturally."
 
     prompt = f"{guidance}\n\n{text}"
 

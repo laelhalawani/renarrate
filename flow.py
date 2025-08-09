@@ -64,7 +64,7 @@ def run_pipeline(video_url: str, target_language: str, voice:Voice) -> VideoProc
 
 if __name__ == "__main__":
     # Example usage
-    video_url = "https://www.youtube.com/watch?v=x3r6MF6XbkE"
+    video_url = "https://www.youtube.com/watch?v=tqPQB5sleHY"
     target_language = select_language_by_name("Polish")
     gemini_voice = select_gemini_voice("Orus")
     elevenlabs_voice = select_elevenlabs_voice("Daniel")
