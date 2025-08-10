@@ -2,33 +2,6 @@ from difflib import get_close_matches
 
 from typing import Literal
 
-LanguageCode = Literal[
-    "ar-EG",  # Arabic (Egyptian)
-    "bn-BD",  # Bengali (Bangladesh)
-    "nl-NL",  # Dutch (Netherlands)
-    "en-IN",  # English (India)
-    "en-US",  # English (US)
-    "fr-FR",  # French (France)
-    "de-DE",  # German (Germany)
-    "hi-IN",  # Hindi (India)
-    "id-ID",  # Indonesian (Indonesia)
-    "it-IT",  # Italian (Italy)
-    "ja-JP",  # Japanese (Japan)
-    "ko-KR",  # Korean (Korea)
-    "mr-IN",  # Marathi (India)
-    "pl-PL",  # Polish (Poland)
-    "pt-BR",  # Portuguese (Brazil)
-    "ro-RO",  # Romanian (Romania)
-    "ru-RU",  # Russian (Russia)
-    "es-US",  # Spanish (US)
-    "ta-IN",  # Tamil (India)
-    "te-IN",  # Telugu (India)
-    "th-TH",  # Thai (Thailand)
-    "tr-TR",  # Turkish (Turkey)
-    "uk-UA",  # Ukrainian (Ukraine)
-    "vi-VN",  # Vietnamese (Vietnam)
-]
-
 LANGUAGES = [
     ("ar-EG", "Arabic (Egyptian)"),
     ("bn-BD", "Bengali (Bangladesh)"),
