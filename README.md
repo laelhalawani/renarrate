@@ -6,8 +6,9 @@ This is a GenAI powered pipeline for automatically narrating youtube video voice
 2) Configure .env
 3) Run `docker compose build` and `docker compose up -d`
 4) Install your chrome extension by going to `chrome://extensions/` and clicknig `Load Unpacked` then select the entire `extension` dir in this repo and accept
-5) Click the extension and confirm BE url
+5) Click the extension icon in your browser and confirm BE url
 6) Then click it again on any YT video link to send it to the backend for processing
+7) You can click "See VO'ed videos" in the extension to see WebUI
 
 **IMPORTANT**
 - It's super early PoC and it's buggy
