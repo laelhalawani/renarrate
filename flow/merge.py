@@ -51,7 +51,7 @@ def merge_video_audio(
     # Attach mixed audio back to the video and write file
     out_clip = video_clip.with_audio(mixed_audio)
     print(f"Saving final video to: {final_video_save_path}")
-    out_clip.write_videofile(final_video_save_path, codec="libx264", audio_codec="aac")
+    out_clip.write_videofile(final_video_save_path)
 
     # Cleanup
     for clip in (narration_audio, mixed_audio, video_clip, out_clip):

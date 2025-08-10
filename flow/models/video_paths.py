@@ -59,7 +59,7 @@ class VideoProcessingPaths:
 
     @property
     def final_video_path(self):
-        return self._path("final_video.mkv")
+        return self._path("final_video.webm")
 
     @property
     def video_info_path(self):

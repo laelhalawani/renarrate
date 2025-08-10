@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Renarrate: Queue New VO",
+  "version": "1.0.0",
+  "description": "Queue a new renarration job for the current YouTube video, right from your browser.",
+  "action": {
+    "default_title": "Queue VO",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ]
+}

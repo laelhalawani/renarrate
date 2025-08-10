@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>New VO Job</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>New VO Job</h1>
+    </header>
+
+    <!-- One-time setup (first open): backend URL -->
+    <section id="setup" class="card hidden" aria-hidden="true">
+      <h2>Backend Server</h2>
+      <p>Enter your API base URL. The default is <code>http://localhost:8000</code>.</p>
+      <label>
+        API Base URL
+        <input type="url" id="apiBaseUrl" placeholder="http://localhost:8000" />
+      </label>
+      <div class="row">
+        <button id="saveBaseUrl" class="primary">Save</button>
+      </div>
+      <div id="setupMsg" class="msg"></div>
+    </section>
+
+    <!-- Main form -->
+    <section id="formCard" class="card">
+      <label>
+        YouTube URL
+        <input type="url" id="ytUrl" placeholder="https://www.youtube.com/watch?v=..." />
+      </label>
+
+      <label>
+        Target language (locale or name)
+        <input type="text" id="targetLang" placeholder="e.g., Polish or pl-PL" />
+      </label>
+
+      <label>
+        TTS provider
+        <select id="provider">
+          <option value="elevenlabs" selected>ElevenLabs</option>
+          <option value="gemini">Gemini</option>
+        </select>
+      </label>
+
+      <label>
+        Voice name (optional)
+        <input type="text" id="voice" placeholder="e.g., Daniel or Orus" />
+      </label>
+
+      <div class="row">
+        <button id="submitBtn" class="primary">Queue Job</button>
+      </div>
+
+      <div id="status" class="msg" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="footer">
+      <button id="openUi" class="linklike">See VO’ed videos →</button>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

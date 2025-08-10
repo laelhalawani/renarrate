@@ -1,0 +1,26 @@
+FROM python:3.12-slim
+
+# System deps for ffmpeg
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install Python deps first (better caching)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app code
+COPY . .
+
+# Expose port for Uvicorn
+EXPOSE 8000
+
+# Default to the Celery-based API
+ENV CELERY_BROKER_URL=redis://redis:6379/0
+ENV CELERY_RESULT_BACKEND=redis://redis:6379/1
+ENV PYTHONUNBUFFERED=1
+
+# Use the Celery API module; can switch to api.app for host-mode parity
+CMD ["uvicorn", "api.app_celery:app", "--host", "0.0.0.0", "--port", "8000"]

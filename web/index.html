@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Renarration Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="/" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Left: jobs list -->
+    <aside id="left">
+      <header>
+        <div class="left-header-row">
+          <h2>Jobs</h2>
+          <button id="new-btn" class="primary">New</button>
+        </div>
+        <div class="filters">
+          <button data-filter="">All</button>
+          <button data-filter="SUCCESS">Success</button>
+          <button data-filter="RUNNING">Running</button>
+          <button data-filter="PENDING">Pending</button>
+          <button data-filter="FAILED">Failed</button>
+        </div>
+      </header>
+      <ul id="job-list" aria-label="Processed jobs"></ul>
+    </aside>
+
+    <!-- Center: player -->
+    <main id="center">
+      <div id="player-shell">
+        <!-- Native controls as fallback; custom bar below will also show -->
+        <video id="video" preload="metadata" controls></video>
+
+        <!-- Custom controls -->
+        <div id="controls">
+          <button id="playpause" aria-label="Play/Pause">▶</button>
+          <div id="timeline" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="progress"></div>
+          </div>
+          <span id="time">00:00 / 00:00</span>
+          <button id="fullscreen" aria-label="Fullscreen">⛶</button>
+        </div>
+      </div>
+      <div id="empty-state" hidden>Select a job from the left to start playback.</div>
+    </main>
+
+    <!-- Right: metadata -->
+    <aside id="right">
+      <header><h2>Metadata</h2></header>
+      <div id="meta">
+        <dl>
+          <dt>Title</dt><dd id="m-title">—</dd>
+          <dt>Uploader</dt><dd id="m-uploader">—</dd>
+          <dt>Duration</dt><dd id="m-duration">—</dd>
+          <dt>Upload Date</dt><dd id="m-upload-date">—</dd>
+          <dt>Views</dt><dd id="m-views">—</dd>
+          <dt>Likes</dt><dd id="m-likes">—</dd>
+          <dt>Comments</dt><dd id="m-comments">—</dd>
+          <dt>Source</dt><dd id="m-url">—</dd>
+          <dt>Request ID</dt><dd id="m-request-id">—</dd>
+          <dt>Job ID</dt><dd id="m-job-id">—</dd>
+        </dl>
+      </div>
+    </aside>
+  </div>
+
+  <!-- New Job Modal -->
+  <div id="modal-backdrop" class="hidden" aria-hidden="true"></div>
+  <div id="new-modal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="new-modal-title">
+    <div class="modal-header">
+      <h3 id="new-modal-title">Create New Job</h3>
+      <button id="modal-close" aria-label="Close">✕</button>
+    </div>
+    <form id="new-form" novalidate>
+      <label>
+        YouTube URL
+        <input type="url" id="f-url" name="yt_video_url" placeholder="https://www.youtube.com/watch?v=..." required />
+      </label>
+
+      <label>
+        Target language
+        <input type="text" id="f-language" name="target_language" placeholder="e.g., Polish or pl-PL" required />
+      </label>
+
+      <label>
+        TTS provider
+        <select id="f-provider" name="tts_provider">
+          <option value="elevenlabs" selected>ElevenLabs</option>
+          <option value="gemini">Gemini</option>
+        </select>
+      </label>
+
+      <label>
+        Voice name (optional)
+        <input type="text" id="f-voice" name="voice_name" placeholder="e.g., Daniel or Orus" />
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" id="modal-cancel">Cancel</button>
+        <button type="submit" class="primary">Create</button>
+      </div>
+
+      <div id="form-error" class="form-error" role="alert" aria-live="polite"></div>
+    </form>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="hidden" role="status" aria-live="polite"></div>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
