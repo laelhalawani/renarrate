@@ -1,6 +1,15 @@
 # Renarrate
 
 This is a GenAI powered pipeline for automatically narrating YouTube video voice-overs.
+How it works once installed:
+
+- click the extension
+- input youtube video link (or autopopulates if you click it on YT video webpage)
+- input target voice-over language (or autopopulates using your broswer's locale)
+- optionally change provider and input voice (but has default values)
+- click `queue job`
+- it will be sent to backend for processing and automated generation of voice-over and adding it to video
+- click `see VO'ed videos` to see WebUI where you can watch videos with added voice-over
 
 ---
 
