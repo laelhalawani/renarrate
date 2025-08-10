@@ -10,6 +10,7 @@ How it works once installed:
 - click `queue job`
 - it will be sent to backend for processing and automated generation of voice-over and adding it to video
 - click `see VO'ed videos` to see WebUI where you can watch videos with added voice-over
+- NOTE: it can take good couple of minutes to finish processing depending on your video, give it 5-15min
 
 ---
 
