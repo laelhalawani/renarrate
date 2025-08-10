@@ -1,7 +1,3 @@
-Here’s the updated README with **all Gemini & ElevenLabs voices** and **all supported languages** from your `LANGUAGES` list, including codes and display names, so users don’t have to look inside the code.
-
----
-
 # Renarrate
 
 This is a GenAI powered pipeline for automatically narrating YouTube video voice-overs.
